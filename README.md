@@ -2,7 +2,7 @@ agate是去哪儿网酒店前端架构组推出一个nodejs框架，能帮你迅
 
 主要依赖技术
 __________________________
-koa + pm2 + log4js + ...
+koa + nodemon + log4js + ...
 
 <b>为什么使用koa</b>  ? nodejs三大框架express, koa, hapi， 目前国内最流行的是前两者。
 
@@ -16,43 +16,60 @@ koa是基于generator与co之上的新一代的中间件框架, 代表着历史�
 也不需要各种检测错误了，也不需要每次都用finish来确保程序正常关闭了。
 3. 内置了很多以前express的第三方基础库，更加方便。这样你写中间件的时候没必要到处安装依赖库。
 
-<b>为什么使用pm2</b>  ? 最牛的监控平台，集成多线程及热启动技术。
+目录结构
+```
+│
+├──agate.js
+├──server.js
+├──app
+│　　├──layouts
+│    │    └──layout1.html
+│　　└──pages
+│           ├──home
+│           │     ├──controller.js
+│           │     └──index.html
+│           └──xxx
+│                  ├──controller.js
+│                  └──index.html
+├──config
+│　　 ├──filters.js
+│　　 ├──log4js.js
+│　　 └──routes.json
+├──core
+│　　 └──lur.js
+├──bin
+│　 　└──agate.js
+├──public
+│     └──favicon.ico
+├──logs
+│     └──favicon.ico       
+├──node_modules
+└──package.json
+```  
+http://www.veryhuo.com/a/view/39755.html
 
-如果你在启动时报以下错误
+
+## 启动命令
+```
+agate start 3000 '' prod
+agate start 3000 '' test
+agate start 3000 '' dev
+```
+
+## 脚手架命令
 ```javascript
-D:\agate>pm2 start app --node-args="--harmony"
-fs.js:751
-  return binding.mkdir(pathModule._makeLong(path),
-                 ^
-Error: ENOENT, no such file or directory 'D:\Users\qincheng.zhong.QUNARSERVERS\.
-pm2'
+node --harmony agate 
 ```
-那么你应该建立`D:\Users\qincheng.zhong.QUNARSERVERS\.pm2`目录就可以了
+
+##直接启动命令
 ```javascript
-D:\agate>mkdir D:\Users\qincheng.zhong.QUNARSERVERS\.pm2
-
-D:\agate>dir D:\Users\qincheng.zhong.QUNARSERVERS\.pm2
-```
-https://doesnotscale.com/deploying-node-js-with-pm2-and-nginx/
-然后运行`pm2 start app --node-args="--harmony"`（你不需要再运行node app --harmony） 
-![image](https://cloud.githubusercontent.com/assets/190846/7040248/8ed8d2ca-ddff-11e4-8868-2c0c16b95549.png)
-
-
-当然我们也可以用配置方式json启动pm2
-
-```javascript
-$ pm2 start processes.json
-$ pm2 stop processes.json
-$ pm2 delete processes.json
-$ pm2 restart processes.json
+agate agate scaffold /test2 test2  index post#create
 ```
 
-pm2.json在window下不能使用监控功能watch
-配置方式不时会出问题,实在不行,还是换回命令行方式
-```
-pm2 start app --node-args="--harmony" --name "kkk" --watch
-```
--i 好像不怎么好用
+
+在开发环境使用 nodemon, 在生产环境使用pm2
+//http://ourjs.com/detail/52456ae04cd0e14503000009
+
 
 
 <b>为什么使用log4js</b>  ? 其前身是log4j， 历史悠久， 质量有保证， 并且提供各种日志打印方式及保存方案。
@@ -118,7 +135,5 @@ routes["get /xxxx"] = {
 <p>这样就over了。什么日志， session, cookie, 多线程并发都为你准备好了。</p>
 
 更多教程，当你启动本工程后，首页就是教程首页。然后你再将routes中的路由规则重设首页，添加你自己的页面！
-
-
 
 
